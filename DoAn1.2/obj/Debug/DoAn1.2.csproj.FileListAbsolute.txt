@@ -1,0 +1,8 @@
+C:\Users\PHUOC BINH\Documents\C#\DoAn1.2\DoAn1.2\bin\Debug\DoAn1.2.exe.config
+C:\Users\PHUOC BINH\Documents\C#\DoAn1.2\DoAn1.2\bin\Debug\DoAn1.2.exe
+C:\Users\PHUOC BINH\Documents\C#\DoAn1.2\DoAn1.2\bin\Debug\DoAn1.2.pdb
+C:\Users\PHUOC BINH\Documents\C#\DoAn1.2\DoAn1.2\obj\Debug\DoAn1.2.csproj.AssemblyReference.cache
+C:\Users\PHUOC BINH\Documents\C#\DoAn1.2\DoAn1.2\obj\Debug\DoAn1.2.csproj.SuggestedBindingRedirects.cache
+C:\Users\PHUOC BINH\Documents\C#\DoAn1.2\DoAn1.2\obj\Debug\DoAn1.2.csproj.CoreCompileInputs.cache
+C:\Users\PHUOC BINH\Documents\C#\DoAn1.2\DoAn1.2\obj\Debug\DoAn1.2.exe
+C:\Users\PHUOC BINH\Documents\C#\DoAn1.2\DoAn1.2\obj\Debug\DoAn1.2.pdb
