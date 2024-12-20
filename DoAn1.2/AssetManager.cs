@@ -14,6 +14,7 @@ namespace DoAn1._2
     {
         private Hashtable assets = new Hashtable();
         private BinarySearchTree assetsTree = new BinarySearchTree();
+        private TreeLocation treeLocation = new TreeLocation();
         List<Location> locations = new List<Location>();
         List<AssetType> assetTypes= new List<AssetType>();
         private Dictionary<string, List<MaintenanceHistory>> maintenanceRecords = new Dictionary<string, List<MaintenanceHistory>>();
@@ -40,6 +41,12 @@ namespace DoAn1._2
             locations.Add(new Location(3, "Warehouse", "Kho lưu trữ"));
             locations.Add(new Location(4, "Kitchen", "Nhà bếp"));
             locations.Add(new Location(5, "Main Lobby", "Khu vực lễ tân chính"));
+
+            treeLocation.Add(new Location(1, "Server Room", "Phòng máy chủ"));
+            treeLocation.Add(new Location(2, "Office 105", "Phòng làm việc 105"));
+            treeLocation.Add(new Location(3, "Warehouse", "Kho lưu trữ"));
+            treeLocation.Add(new Location(4, "Kitchen", "Nhà bếp"));
+            treeLocation.Add(new Location(5, "Main Lobby", "Khu vực lễ tân chính"));
 
             assetsTree.Add(new Assets("A001", "Laptop Dell XPS 13", "Laptop", new DateTime(2022, 5, 15), 1200.0, "Office 101", "Good", 1));
             assetsTree.Add(new Assets("A002", "iPhone 14 Pro", "Phone", new DateTime(2023, 1, 25), 999.99, "Office 102", "New", 2));
@@ -263,12 +270,13 @@ namespace DoAn1._2
 
 
 
+
         // hiểu thị tất cả các Vị trí thuộc id nhất định
         public void PrintAssetsByLocation(int location)
         {
-            List<Assets> officeAssets = GetAssetsByLocation(location);
+            List<Assets> matchedAssets = assetsTree.SearchAssetsByLocation(location);
 
-            foreach (var asset in officeAssets)
+            foreach (var asset in matchedAssets)
             {
                 Console.WriteLine($"ID: {asset.assetId}, Name: {asset.assetName}, Location: {asset.assetName}");
             }
@@ -392,6 +400,42 @@ namespace DoAn1._2
         }
 
 
+        public bool CheckLocations(int location)
+        {
+            var checkLocation = locations.SingleOrDefault(p => p.locationId == location);
+            if(checkLocation != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void AddLocation(int location, string locationName, string description)
+        {
+            treeLocation.Add(new Location(location, locationName, description));
+            locations.Add(new Location(location,locationName,description));
+            Console.WriteLine("Dữ liệu đã thêm thành công!");
+        }
+
+        public void UpdateLocation(int location, string locationName, string description)
+        {
+            var checkLocation = locations.SingleOrDefault(p => p.locationId == location);
+            checkLocation.locationName = locationName;
+            checkLocation.locationDescription = description;
+
+            assetsTree.UpdateLocation(new Location(location, locationName, description));
+
+            Console.WriteLine("Dữ liệu đã cập nhật thành công");
+        }
+
+        public void DeleteLocation(int location)
+        {
+            var deleteLocation = locations.SingleOrDefault(p => p.locationId == location);
+
+            assetsTree.DeleteLocation(location);
+
+            Console.WriteLine("Dữ liệu đã được xóa thành công");
+        }
 
     }
 }

@@ -266,9 +266,120 @@ namespace DoAn1._2
 
 
                         break;
+
+
                         /// Quản lý Vị trí tài sản
                     case "3":
 
+                        string assetLocation;
+                        do
+                        {
+                            Console.WriteLine("\n===== Quản lý thông tin Vị trí tài sản =====");
+                            Console.WriteLine("1. Thêm vị trí");
+                            Console.WriteLine("2. Sửa vị trí");
+                            Console.WriteLine("3. Xóa vị trí");
+                            Console.WriteLine("0. Quay lại");
+
+                            assetLocation = Console.ReadLine();
+
+                            switch (assetLocation)
+                            {
+                                case "1":
+                                    int idLocationNew;
+                                    bool checkLocationNew = false;
+
+                                    do
+                                    {
+                                        Console.WriteLine("Nhập mã vị trí: ");
+                                        idLocationNew = int.Parse(Console.ReadLine());
+                                        if (idLocationNew == 0)
+                                            break;
+                                        if (assetManager.CheckLocation(idLocationNew))
+                                        {
+                                            Console.WriteLine("Dữ liệu này Không tồn tại, vui lòng nhập lại");
+                                            Console.WriteLine("Bạn có thể nhập số 0 để quay lại!!");
+                                        }
+                                        else
+                                            checkLocationNew = true;
+
+                                    } while (!checkLocationNew);
+
+                                    if (idLocationNew == 0)
+                                        break;
+
+                                    Console.WriteLine("Nhập tên vị trí: ");
+                                    string locationName = Console.ReadLine();
+                                    Console.WriteLine("Miêu tả về vị trí: ");
+                                    string description = Console.ReadLine();
+
+                                    assetManager.AddLocation(idLocationNew, locationName, description);
+
+
+                                    break;
+                                case "2":
+                                    int idLocationUpdate;
+                                    bool checkLocationUpdate = false;
+
+                                    do
+                                    {
+                                        Console.WriteLine("Nhập mã vị trí: ");
+                                        idLocationUpdate = int.Parse(Console.ReadLine());
+                                        if (idLocationUpdate == 0)
+                                            break;
+                                        if (!assetManager.CheckLocation(idLocationUpdate))
+                                        {
+                                            Console.WriteLine("Dữ liệu này Không tồn tại, vui lòng nhập lại");
+                                            Console.WriteLine("Bạn có thể nhập số 0 để quay lại!!");
+                                        }
+                                        else
+                                            checkLocationUpdate = true;
+
+                                    } while (!checkLocationUpdate);
+
+                                    if (idLocationUpdate == 0)
+                                        break;
+
+                                    Console.WriteLine("Nhập tên vị trí: ");
+                                    string locationNameNew = Console.ReadLine();
+                                    Console.WriteLine("Miêu tả về vị trí: ");
+                                    string descriptionNew = Console.ReadLine();
+
+                                    assetManager.UpdateLocation(idLocationUpdate, locationNameNew, descriptionNew);
+
+                                    break;
+                                case "3":
+
+                                    int idLocationDelete;
+                                    bool checkLocationDelete = false;
+
+                                    do
+                                    {
+                                        Console.WriteLine("Nhập mã vị trí: ");
+                                        idLocationDelete = int.Parse(Console.ReadLine());
+                                        if (idLocationDelete == 0)
+                                            break;
+                                        if (!assetManager.CheckLocation(idLocationDelete))
+                                        {
+                                            Console.WriteLine("Dữ liệu này Không tồn tại, vui lòng nhập lại");
+                                            Console.WriteLine("Bạn có thể nhập số 0 để quay lại!!");
+                                        }
+                                        else
+                                            checkLocationUpdate = true;
+
+                                    } while (!checkLocationDelete);
+
+                                    if (idLocationDelete == 0)
+                                        break;
+
+                                    assetManager.DeleteLocation(idLocationDelete);
+
+                                    break;
+                                case "0":
+                                    break;
+                            }
+                        } while (assetLocation != "0");
+
+                        break;
                     /// Quản lý Tìm kiếm...
                     case "4":
                         string searchChoice;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DoAn1.Attribute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace DoAn1._2.Attribute
         private class Node
         {
             public Assets Asset;
+            public Location Location;
             public Node Left, Right;
 
             public Node(Assets asset)
@@ -47,6 +49,33 @@ namespace DoAn1._2.Attribute
             return SearchRecursive(root, assetId);
         }
 
+        public List<Assets> SearchAssetsByLocation(int locationId)
+        {
+            List<Assets> matchedAssets = new List<Assets>();
+            SearchByLocationRecursive(root, locationId, matchedAssets);
+            return matchedAssets;
+        }
+
+        private void SearchByLocationRecursive(Node node, int locationId, List<Assets> matchedAssets)
+        {
+            if (node == null)
+                return;
+
+            if (node.Asset.locationId == locationId)
+            {
+                matchedAssets.Add(node.Asset);
+            }
+
+            if (locationId < node.Asset.locationId)
+            {
+                SearchByLocationRecursive(node.Left, locationId, matchedAssets);
+            }
+            else if (locationId > node.Asset.locationId)
+            {
+                SearchByLocationRecursive(node.Right, locationId, matchedAssets);
+            }
+        }
+
         private Assets SearchRecursive(Node node, string assetId)
         {
             if (node == null)
@@ -64,6 +93,8 @@ namespace DoAn1._2.Attribute
         {
             return SearchRecursive(root, assetName);
         }
+
+
 
         private Assets SearchRecursiveName(Node node, string assetName)
         {
@@ -203,6 +234,78 @@ namespace DoAn1._2.Attribute
             return node;
         }
 
+        private Node DeleteNodeLocationMain(Node node, int location)
+        {
+            if (node == null)
+            {
+                return null;
+            }
+
+            // Tìm nút cần xóa
+            if (location < node.Location.locationId)
+            {
+                node.Left = DeleteNodeLocationMain(node.Left, location);
+            }
+            else if (location > node.Location.locationId)
+            {
+                node.Right = DeleteNodeLocationMain(node.Right, location);
+            }
+            else
+            {
+                // Nút cần xóa đã được tìm thấy
+                if (node.Left == null && node.Right == null)
+                {
+                    return null;
+                }
+                else if (node.Left == null)
+                {
+                    return node.Right;
+                }
+                else if (node.Right == null)
+                {
+                    return node.Left;
+                }
+                else
+                {
+                    Node minNode = FindMinNode(node.Right);
+                    node.Asset = minNode.Asset;
+                    node.Right = DeleteNodeLocationMain(node.Right, minNode.Location.locationId);
+                }
+            }
+
+            return node;
+        }
+
+
+        public void UpdateLocation(Location location)
+        {
+            root = UpdateLocation(root, location);
+        }
+
+        private Node UpdateLocation(Node node, Location location)
+        {
+            if (node == null)
+            {
+                return null;
+            }
+
+            // Tìm tài sản trong cây bằng ID
+            if (node.Location.locationId == location.locationId)
+            {
+                node.Location = location;
+            }
+            else if (location.locationId < node.Location.locationId)
+            {
+                node.Left = UpdateLocation(node.Left, location);
+            }
+            else
+            {
+                node.Right = UpdateLocation(node.Right, location);
+            }
+
+            return node;
+        }
+
 
         public bool Delete(string assetId)
         {
@@ -210,6 +313,11 @@ namespace DoAn1._2.Attribute
             return root != null;
         }
 
+        public bool DeleteLocation(int location)
+        {
+            root = DeleteNodeLocationMain(root, location);
+            return root != null;
+        }
 
         public bool DeleteType(string assetType)
         {
