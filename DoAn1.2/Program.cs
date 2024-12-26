@@ -53,15 +53,16 @@ namespace DoAn1._2
                                     
                                     Console.Write("Nhập mã tài sản: ");
                                     string id = Console.ReadLine();
-                                    if (id.Equals("exit", StringComparison.OrdinalIgnoreCase)) break;
+                                    if (id == "exit") break;
 
                                     Console.Write("nhập tên tài sản: ");
                                     string name = Console.ReadLine();
-                                    if (name.Equals("exit", StringComparison.OrdinalIgnoreCase)) break;
-
+                                    if(name == "exit") break;
 
                                     Console.Write("Nhập trạng thái tài sản: ");
                                     string status = Console.ReadLine();
+                                    if(status == "exit") break;
+
                                     if (status.Equals("exit", StringComparison.OrdinalIgnoreCase)) break;
 
 
@@ -90,7 +91,7 @@ namespace DoAn1._2
                                     {
                                         Console.Write("Nhập giá trị tài sản ban đầu: ");
                                         string input = Console.ReadLine();
-                                        if (input.Equals("exit", StringComparison.OrdinalIgnoreCase)) break;
+                                        if (input == "exit") break;
 
                                         if (double.TryParse(input, out initial)) break;
 
@@ -181,7 +182,7 @@ namespace DoAn1._2
                                         {
                                             Console.WriteLine("Nhập ngày mua tài sản (yyyy-MM-dd):");
                                             string input = Console.ReadLine();
-                                            if (input.Equals("exit", StringComparison.OrdinalIgnoreCase)) break;
+                                            if (input == "exit") break;
 
                                             if (DateTime.TryParse(input, out newPurchase)) break;
 
@@ -193,7 +194,7 @@ namespace DoAn1._2
                                         {
                                             Console.Write("Nhập giá trị tài sản ban đầu: ");
                                             string input = Console.ReadLine();
-                                            if (input.Equals("exit", StringComparison.OrdinalIgnoreCase)) break;
+                                            if (input == "exit") break;
 
                                             if (double.TryParse(input, out newInitialValue)) break;
 
