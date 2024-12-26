@@ -49,112 +49,290 @@ namespace DoAn1._2
                             switch (manageChoice)
                             {
                                 case "1":
-                                    Console.Write("Enter Asset ID: ");
+                                    Console.WriteLine("Bạn có thể nhập 'exit' bất kỳ lúc nào để hủy bỏ thao tác thêm tài sản.");
+                                    
+                                    Console.Write("Nhập mã tài sản: ");
                                     string id = Console.ReadLine();
-                                    Console.Write("Enter Name: ");
+                                    if (id.Equals("exit", StringComparison.OrdinalIgnoreCase)) break;
+
+                                    Console.Write("nhập tên tài sản: ");
                                     string name = Console.ReadLine();
-                                    Console.Write("Enter tyoe: ");
-                                    string type = Console.ReadLine();
-                                    Console.WriteLine("Nhập ngày mua tài sản (yyyy-MM-dd):");
-                                    DateTime purchase;
-                                    while (!DateTime.TryParse(Console.ReadLine(), out purchase))
+                                    if (name.Equals("exit", StringComparison.OrdinalIgnoreCase)) break;
+
+
+                                    Console.Write("Nhập trạng thái tài sản: ");
+                                    string status = Console.ReadLine();
+                                    if (status.Equals("exit", StringComparison.OrdinalIgnoreCase)) break;
+
+
+                                    DateTime purchase = DateTime.MinValue; 
+
+                                    while (true)
                                     {
-                                        Console.WriteLine("Ngày không hợp lệ. Vui lòng nhập lại theo định dạng (yyyy-MM-dd):");
+                                        Console.WriteLine("Nhập ngày mua tài sản (yyyy-MM-dd):");
+                                        string input = Console.ReadLine();
+                                        if (input.Equals("exit", StringComparison.OrdinalIgnoreCase)) break;
+
+                                        if (DateTime.TryParse(input, out purchase)) break;
+
+                                        Console.WriteLine("Ngày không hợp lệ. Vui lòng nhập lại theo định dạng (yyyy-MM-dd) hoặc nhập 'exit' để hủy.");
                                     }
 
-                                    Console.Write("Enter Initial: ");
-                                    double initial = double.Parse(Console.ReadLine());
-                                    Console.Write("Enter Maintenance: ");
-                                    string maintenance = Console.ReadLine();
-                                    string status;
-                                    bool boolStatus = false;
+                                    // Kiểm tra nếu người dùng nhập 'exit' và không có giá trị
+                                    if (purchase == DateTime.MinValue)
+                                    {
+                                        Console.WriteLine("Thao tác đã bị hủy.");
+                                        break; 
+                                    }
+
+                                    double initial = 0;
+                                    while (true)
+                                    {
+                                        Console.Write("Nhập giá trị tài sản ban đầu: ");
+                                        string input = Console.ReadLine();
+                                        if (input.Equals("exit", StringComparison.OrdinalIgnoreCase)) break;
+
+                                        if (double.TryParse(input, out initial)) break;
+
+                                        Console.WriteLine("Giá trị không hợp lệ. Vui lòng nhập số hoặc nhập 'exit' để hủy.");
+                                    }
+                                    if (initial == 0) break;
+
+
+                                    int maintenance = 0;
+
+
+                                    Console.WriteLine("Tất cả các thông tin về loại tài sản");
+                                    assetManager.DisplayAssetsType();
+                                    string type;
+                                    bool bool_Type = false;
 
                                     do
                                     {
-                                        Console.Write("Enter Status: ");
-                                        status = Console.ReadLine();
+                                        Console.Write("Nhập mã loại: ");
+                                        type = Console.ReadLine();
+                                        if (type == "exit") break;
 
-                                        if (assetManager.CheckType(status))
-                                            boolStatus = true;
+                                        if (assetManager.CheckType(type))
+                                            bool_Type = true;
                                         else
                                             Console.WriteLine("Loại tài sản không tồn tịa, vui lòng nhập lại");
 
-                                    } while (!boolStatus);
+                                    } while (!bool_Type);
 
+                                    if (type == "exit") break;
 
-
-
-
+                                    Console.WriteLine("Tất cả các thông tin về vị trí của công ty");
 
                                     assetManager.DisplayAllLocation();
-                                    int location;
                                     bool isValid = false;
-
+                                    int location = 0;
                                     do
                                     {
-                                        Console.Write("Enter Location: ");
-                                        location = int.Parse(Console.ReadLine());
-                                        if(assetManager.CheckLocation(location))
-                                            isValid= true;
+                                        Console.Write("Nhập mã vị trí: ");
+                                        string input = Console.ReadLine();
+                                        if (input == "exit") break;
+
+
+                                        if (int.TryParse(input, out location))
+                                        {
+                                            Console.WriteLine($"Bạn đã nhập: {location}");
+
+                                            if (assetManager.CheckLocation(location))
+                                                isValid = true;
+                                            else
+                                                Console.WriteLine("Vị trí không tồn tại, vui lòng nhập lại.");
+                                        }
                                         else
-                                           Console.WriteLine("Vị trí không tồn tại, vui lòng nhập lại.");
+                                        {
+                                            Console.WriteLine("Dữ liệu nhập vào không hợp lệ. Vui lòng nhập một số nguyên.");
+                                        }
+
 
                                     } while (!isValid);
+
+                                    if (location == 0) break;
+
                                     Assets assets = new Assets(id, name, type, purchase, initial, maintenance, status,location);
                                     assetManager.AddAsset(assets);
                                     break;
                                 case "2":
-                                    Console.WriteLine("Nhập mã tài sản: ");
+                                    Console.WriteLine("Bạn có thể nhập 'exit' bất kỳ lúc nào để hủy bỏ thao tác thêm tài sản.");
+                                    Console.WriteLine("Nhập mã tài sản mới: ");
                                     string idUpdate = Console.ReadLine();
+
+                                    if(idUpdate == "exit") break;
+
                                     if (assetManager.CheckAsset(idUpdate))
                                     {
-                                        Console.Write("Enter Name: ");
+                                        Console.WriteLine("--------------------------Thông tin tài sản hiện tại--------------------------");
+                                        assetManager.SearchAsset(idUpdate);
+                                        Console.Write("Nhập tên tài sản mới: ");
                                         string newName = Console.ReadLine();
-                                        Console.Write("Enter tyoe: ");
+                                        if(newName == "exit") break;
+
+                                        Console.Write("Nhập trạng thái tài sản mới: ");
                                         string newType = Console.ReadLine();
-                                        Console.WriteLine("Nhập ngày mua tài sản (yyyy-MM-dd):");
-                                        DateTime newPurchase;
-                                        while (!DateTime.TryParse(Console.ReadLine(), out newPurchase))
+                                        if(newType == "exit") break;
+
+                                        DateTime newPurchase = DateTime.MinValue; // Gán giá trị mặc định
+
+                                        while (true)
                                         {
-                                            Console.WriteLine("Ngày không hợp lệ. Vui lòng nhập lại theo định dạng (yyyy-MM-dd):");
+                                            Console.WriteLine("Nhập ngày mua tài sản (yyyy-MM-dd):");
+                                            string input = Console.ReadLine();
+                                            if (input.Equals("exit", StringComparison.OrdinalIgnoreCase)) break;
+
+                                            if (DateTime.TryParse(input, out newPurchase)) break;
+
+                                            Console.WriteLine("Ngày không hợp lệ. Vui lòng nhập lại theo định dạng (yyyy-MM-dd) hoặc nhập 'exit' để hủy.");
                                         }
 
-                                        Console.Write("Enter Initial: ");
-                                        double newInitialValue = double.Parse(Console.ReadLine());
-                                        Console.Write("Enter Maintenance: ");
-                                        string newMaintenance = Console.ReadLine();
-                                        Console.Write("Enter Status: ");
-                                        string newStatus = Console.ReadLine();
+                                        double newInitialValue = 0;
+                                        while (true)
+                                        {
+                                            Console.Write("Nhập giá trị tài sản ban đầu: ");
+                                            string input = Console.ReadLine();
+                                            if (input.Equals("exit", StringComparison.OrdinalIgnoreCase)) break;
+
+                                            if (double.TryParse(input, out newInitialValue)) break;
+
+                                            Console.WriteLine("Giá trị không hợp lệ. Vui lòng nhập số hoặc nhập 'exit' để hủy.");
+                                        }
+                                        if (newInitialValue == 0) break;
+
+
+                                        int newMaintenance = 0;
+                                        while (true)
+                                        {
+                                            Console.Write("Nhập số lần bảo trì mới: ");
+                                            string input = Console.ReadLine();
+                                            if(input == "exit") break;
+
+                                            if (int.TryParse(input, out newMaintenance)) break;
+
+                                            Console.WriteLine("Giá trị không hợp lệ. Vui lòng nhập số hoặc nhập 'exit' để hủy.");
+                                        }
+                                        if (newMaintenance == 0) break;
+
+
+                                        Console.WriteLine("Tất cả các thông tin về loại tài sản");
+                                        assetManager.DisplayAssetsType();
+                                        string new_Type;
+                                        bool bool_Type_New = false;
+
+                                        do
+                                        {
+                                            Console.Write("Nhập mã loại: ");
+                                            new_Type = Console.ReadLine();
+                                            if(new_Type == "exit") break;
+                                            if (assetManager.CheckType(new_Type))
+                                                bool_Type_New = true;
+                                            else
+                                                Console.WriteLine("Loại tài sản không tồn tịa, vui lòng nhập lại");
+
+                                        } while (!bool_Type_New);
+
+                                        if (new_Type == "exit") break;
+
+
+
+
+
+                                        Console.WriteLine("Tất cả các thông tin về vị trí của công ty");
+
                                         assetManager.DisplayAllLocation();
-                                        Console.Write("Enter Location: ");
-                                        int newLocationId = int.Parse(Console.ReadLine());
+                                        bool isValid_Location = false;
+                                        int new_Location = 0;
+                                        do
+                                        {
+                                            Console.Write("Nhập mã vị trí: ");
+                                            string input = Console.ReadLine();
+                                            if(input == "exit") break;
+                                            if (int.TryParse(input, out new_Location))
+                                            {
+                                                Console.WriteLine($"Bạn đã nhập: {new_Location}");
+
+                                                if (assetManager.CheckLocation(new_Location))
+                                                    isValid_Location = true;
+                                                else
+                                                    Console.WriteLine("Vị trí không tồn tại, vui lòng nhập lại.");
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine("Dữ liệu nhập vào không hợp lệ. Vui lòng nhập một số nguyên.");
+                                            }
+                                        } while (!isValid_Location);
+
+                                        if (new_Location == 0) break;
 
                                         assetManager.UpdateAsset(idUpdate, newName, newType, newPurchase, newInitialValue,
-                                            newMaintenance, newStatus, newLocationId);
+                                            newMaintenance, new_Type, new_Location);
+
+
                                     }
                                     break;
                                 case "3":
                                     Console.WriteLine("Nhập mã tài sản: ");
                                     string idDelete = Console.ReadLine();
-                                    if(assetManager.CheckAsset(idDelete))
-                                        assetManager.DeleteAsset(idDelete);
+                                    if (assetManager.CheckAsset(idDelete))
+                                    {
+                                        Console.WriteLine("Bạn có thật sự muốn xóa dữ liệu này không (Y or N): ");
+                                        string check_Yes_No = Console.ReadLine();
+                                        switch(check_Yes_No)
+                                        {
+                                            case "Y":
+                                                assetManager.DeleteAsset(idDelete);
+                                                break;
+                                            case "N":
+                                                Console.WriteLine("Cảm ơn bạn đã không xóa tài sản!");
+                                                break;
+                                            default:
+                                                Console.WriteLine("Dữ liệu nhập vào không đúng yêu cầu!");
+                                                break;
+                                        }
+                                    }
                                     else
                                         Console.WriteLine("Dữ liệu không tồn tại");
                                     break;
                                 case "4":
+                                    Console.WriteLine("----------------------------Dưới đây là tất cả dữ liệu mà công ty đang sở hưu-----------------------------");
                                     assetManager.DisplayAllAssets();
 
                                     break;
                                 case "5":
                                     assetManager.DisplayAllLocation();
-                                    Console.WriteLine("Nhập mã vị trí: ");
-                                    int locationId = int.Parse(Console.ReadLine());
+                                    bool isValid_Location_Delete = false;
+                                    int locationId = 0;
+                                    do
+                                    {
+                                        Console.Write("Nhập mã vị trí: ");
+                                        string input = Console.ReadLine();
+                                        if (input == "exit") break;
+                                        if (int.TryParse(input, out locationId))
+                                        {
+                                            Console.WriteLine($"Bạn đã nhập: {locationId}");
+
+                                            if (assetManager.CheckLocation(locationId))
+                                                isValid_Location_Delete = true;
+                                            else
+                                                Console.WriteLine("Vị trí không tồn tại, vui lòng nhập lại.");
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("Dữ liệu nhập vào không hợp lệ. Vui lòng nhập một số nguyên.");
+                                        }
+                                    } while (!isValid_Location_Delete);
+
+                                    if (locationId == 0) break;
                                     assetManager.PrintAssetsByLocation(locationId);
                                     break;
                                 case "6":
                                     assetManager.DisplayAssetsType();
+                                    Console.WriteLine("Bạn có thể nhập 'exit' bất kỳ lúc nào để hủy bỏ thao tác thêm tài sản.");
                                     Console.WriteLine("Nhập mã loại: ");
                                     string TypeId = Console.ReadLine();
+                                    if (TypeId == "exit") break;
                                     assetManager.DisplayAssetsTypeId(TypeId);
                                     break;
                                 case "0":
@@ -174,9 +352,10 @@ namespace DoAn1._2
                         do
                         {
                             Console.WriteLine("\n===== Quản lý thông tin Loại tài sản =====");
-                            Console.WriteLine("1. Thêm loại tài sản mới");
-                            Console.WriteLine("2. Cập nhật thông tin loại tài sản");
-                            Console.WriteLine("3. Xóa loại tài sản");
+                            Console.WriteLine("1. Hiển thị tất cả loại tài sản");
+                            Console.WriteLine("2. Thêm loại tài sản mới");
+                            Console.WriteLine("3. Cập nhật thông tin loại tài sản");
+                            Console.WriteLine("4. Xóa loại tài sản");
                             Console.WriteLine("0. Quay lại");
 
                             assetTypeChoice= Console.ReadLine();
@@ -184,72 +363,79 @@ namespace DoAn1._2
                             switch (assetTypeChoice)
                             {
                                 case "1":
+                                    assetManager.DisplayAssetsType();
+                                    break;
+                                case "2":
                                     string idType;
                                     bool statusType = false;
-
+                                    Console.WriteLine("Bạn có thể nhập 'exit' bất kỳ lúc nào để hủy bỏ thao tác thêm tài sản.");
                                     do
                                     {
                                         Console.WriteLine("Mã loại tài sản: ");
                                         idType = Console.ReadLine();
+                                        if(idType == "exit") break;
+
                                         if (assetManager.CheckType(idType))
                                             Console.WriteLine("Dữ liệu này đã tồn tại, vui lòng nhập lại");
                                         else
                                             statusType = true;
                                     } while (!statusType);
 
+                                    if (idType == "exit") break;
+
+
                                     Console.WriteLine("Tên loại tài sản: ");
                                     string nameType = Console.ReadLine();
 
                                     assetManager.AddAssetType(idType, nameType);
                                     break;
-                                case "2":
+                                case "3":
                                     string idTypeUpdate;
                                     bool statusTypeUpdate = false;
+                                    Console.WriteLine("Bạn có thể nhập 'exit' bất kỳ lúc nào để hủy bỏ thao tác thêm tài sản.");
 
                                     do
                                     {
                                         Console.WriteLine("Mã loại tài sản: ");
                                         idTypeUpdate = Console.ReadLine();
+                                        if (idTypeUpdate == "exit") break;
                                         if (idTypeUpdate == "0")
                                             break;
                                         if (!assetManager.CheckType(idTypeUpdate))
-                                        {
                                             Console.WriteLine("Dữ liệu này Không tồn tại, vui lòng nhập lại");
-                                            Console.WriteLine("Bạn có thể nhập số 0 để quay lại!!");
-                                        }
                                         else
                                             statusTypeUpdate = true;
 
                                     } while (!statusTypeUpdate);
 
-                                    if (idTypeUpdate == "0")
-                                        break;
+
+                                    if (idTypeUpdate == "exit") break;
+
 
                                     Console.WriteLine("Tên loại tài sản: ");
                                     string nameTypeUpdate = Console.ReadLine();
 
                                     assetManager.UpdateAssetType(idTypeUpdate, nameTypeUpdate);
                                     break;
-                                case "3":
+                                case "4":
                                     string idTypeDelete;
                                     bool statusTypeDelete = false;
-
+                                    Console.WriteLine("Bạn có thể nhập 'exit' bất kỳ lúc nào để hủy bỏ thao tác thêm tài sản.");
                                     do
                                     {
                                         Console.WriteLine("Mã loại tài sản: ");
                                         idTypeDelete = Console.ReadLine();
+                                        if (idTypeDelete == "exit") break;
                                         if (idTypeDelete == "0")
                                             break;
                                         if (!assetManager.CheckType(idTypeDelete))
-                                        {
                                             Console.WriteLine("Dữ liệu này Không tồn tại, vui lòng nhập lại");
-                                            Console.WriteLine("Bạn có thể nhập số 0 để quay lại!!");
-                                        } else
+                                        else
                                             statusTypeDelete = true;
 
                                     } while (!statusTypeDelete);
 
-                                    if (idTypeDelete == "0")
+                                    if (idTypeDelete == "exit")
                                         break;
                                     assetManager.DeleteAssetType(idTypeDelete);
 
@@ -275,9 +461,10 @@ namespace DoAn1._2
                         do
                         {
                             Console.WriteLine("\n===== Quản lý thông tin Vị trí tài sản =====");
-                            Console.WriteLine("1. Thêm vị trí");
-                            Console.WriteLine("2. Sửa vị trí");
-                            Console.WriteLine("3. Xóa vị trí");
+                            Console.WriteLine("1. Hiển thị tất cả vị trí");
+                            Console.WriteLine("2. Thêm vị trí mới");
+                            Console.WriteLine("3. Sửa vị trí");
+                            Console.WriteLine("4. Xóa vị trí");
                             Console.WriteLine("0. Quay lại");
 
                             assetLocation = Console.ReadLine();
@@ -285,22 +472,32 @@ namespace DoAn1._2
                             switch (assetLocation)
                             {
                                 case "1":
-                                    int idLocationNew;
-                                    bool checkLocationNew = false;
+                                    assetManager.DisplayAllLocation();
+                                    break;
 
+                                case "2":
+                                    int idLocationNew = 0;
+                                    bool checkLocationNew = false;
+                                    Console.WriteLine("Bạn có thể nhập 'exit' bất kỳ lúc nào để hủy bỏ thao tác thêm tài sản.");
                                     do
                                     {
                                         Console.WriteLine("Nhập mã vị trí: ");
-                                        idLocationNew = int.Parse(Console.ReadLine());
-                                        if (idLocationNew == 0)
-                                            break;
-                                        if (assetManager.CheckLocation(idLocationNew))
+                                        string input = Console.ReadLine();
+                                        if(input == "exit") break;
+
+                                        if (int.TryParse(input, out idLocationNew))
                                         {
-                                            Console.WriteLine("Dữ liệu này Không tồn tại, vui lòng nhập lại");
-                                            Console.WriteLine("Bạn có thể nhập số 0 để quay lại!!");
+                                            idLocationNew = int.Parse(Console.ReadLine());
+                                            if (idLocationNew == 0)
+                                                break;
+                                            if (assetManager.CheckLocation(idLocationNew))
+                                                Console.WriteLine("Dữ liệu này Không tồn tại, vui lòng nhập lại");
+                                            else
+                                                checkLocationNew = true;
+                                        } else
+                                        {
+                                            Console.WriteLine("Định dạng dữ liệu không chính xác");
                                         }
-                                        else
-                                            checkLocationNew = true;
 
                                     } while (!checkLocationNew);
 
@@ -309,30 +506,37 @@ namespace DoAn1._2
 
                                     Console.WriteLine("Nhập tên vị trí: ");
                                     string locationName = Console.ReadLine();
+                                    if (locationName == "exit") break;
+
                                     Console.WriteLine("Miêu tả về vị trí: ");
                                     string description = Console.ReadLine();
+                                    if(description == "exit") break;
 
                                     assetManager.AddLocation(idLocationNew, locationName, description);
 
 
                                     break;
-                                case "2":
-                                    int idLocationUpdate;
+                                case "3":
+                                    int idLocationUpdate = 0;
                                     bool checkLocationUpdate = false;
-
+                                    Console.WriteLine("Bạn có thể nhập 'exit' bất kỳ lúc nào để hủy bỏ thao tác thêm tài sản.");
                                     do
                                     {
                                         Console.WriteLine("Nhập mã vị trí: ");
-                                        idLocationUpdate = int.Parse(Console.ReadLine());
-                                        if (idLocationUpdate == 0)
-                                            break;
-                                        if (!assetManager.CheckLocation(idLocationUpdate))
+                                        string input = Console.ReadLine();
+                                        if(input == "exit") break;
+                                        if (int.TryParse(input, out idLocationUpdate))
                                         {
-                                            Console.WriteLine("Dữ liệu này Không tồn tại, vui lòng nhập lại");
-                                            Console.WriteLine("Bạn có thể nhập số 0 để quay lại!!");
+                                            if (idLocationUpdate == 0)
+                                                break;
+                                            if (!assetManager.CheckLocation(idLocationUpdate))
+                                                Console.WriteLine("Dữ liệu này Không tồn tại, vui lòng nhập lại");
+                                            else
+                                                checkLocationUpdate = true;
+                                        } else
+                                        {
+                                            Console.WriteLine("Định dạng dữ liệu không chính xác");
                                         }
-                                        else
-                                            checkLocationUpdate = true;
 
                                     } while (!checkLocationUpdate);
 
@@ -341,28 +545,30 @@ namespace DoAn1._2
 
                                     Console.WriteLine("Nhập tên vị trí: ");
                                     string locationNameNew = Console.ReadLine();
+                                    if(locationNameNew == "exit") break;
+
                                     Console.WriteLine("Miêu tả về vị trí: ");
                                     string descriptionNew = Console.ReadLine();
+                                    if(descriptionNew == "exit") break;
 
                                     assetManager.UpdateLocation(idLocationUpdate, locationNameNew, descriptionNew);
 
                                     break;
-                                case "3":
+                                case "4":
 
-                                    int idLocationDelete;
+                                    int idLocationDelete = 0;
                                     bool checkLocationDelete = false;
-
+                                    Console.WriteLine("Bạn có thể nhập 'exit' bất kỳ lúc nào để hủy bỏ thao tác thêm tài sản.");
                                     do
                                     {
                                         Console.WriteLine("Nhập mã vị trí: ");
-                                        idLocationDelete = int.Parse(Console.ReadLine());
+                                        string input = Console.ReadLine();
+                                        if (input == "exit") break;
+                                        if(int.TryParse(input, out idLocationDelete))
                                         if (idLocationDelete == 0)
                                             break;
                                         if (!assetManager.CheckLocation(idLocationDelete))
-                                        {
                                             Console.WriteLine("Dữ liệu này Không tồn tại, vui lòng nhập lại");
-                                            Console.WriteLine("Bạn có thể nhập số 0 để quay lại!!");
-                                        }
                                         else
                                             checkLocationUpdate = true;
 
@@ -390,32 +596,56 @@ namespace DoAn1._2
                             Console.WriteLine("1. Tìm kiếm theo tên Tài sản");
                             Console.WriteLine("2. Tìm kiếm theo Id Tài sản");
                             Console.WriteLine("3. Cập nhật lịch sử bảo trì");
-                            Console.WriteLine("4. Lịch sử bảo trì của tài sản");
+                            Console.WriteLine("4. Xem Lịch sử bảo trì của tài sản");
                             Console.WriteLine("0. Quay lại");
+                            Console.WriteLine("Bạn có thể nhập 'exit' bất kỳ lúc nào để hủy bỏ thao tác thêm tài sản.");
                             searchChoice = Console.ReadLine();
 
                             switch (searchChoice)
                             {
+
                                 case "1":
                                     Console.WriteLine("Nhập tên Tài sản: ");
                                     string name = Console.ReadLine();
+                                    if(name == "exit") break;
                                     assetManager.SearchAssetName(name);
                                     break;
                                 case "2":
                                     Console.WriteLine("Nhập mã tài sản: ");
                                     string id = Console.ReadLine();
+                                    if (id == "exit") break;
                                     assetManager.SearchAsset(id);
                                     break;
                                 case "3":
                                     Console.WriteLine("Nhập mã tài sản đã bảo trì: ");
                                     string idMaintenance = Console.ReadLine();
-                                    Console.WriteLine("Nhập ngày bảo trì (yyyy-MM-dd): ");
-                                    DateTime maintenanceDate = DateTime.Parse(Console.ReadLine());
-                                    assetManager.AddMaintenance(idMaintenance, maintenanceDate);
+                                    if(idMaintenance == "exit") break;
+
+                                    DateTime maintenanceDate = DateTime.MinValue; 
+
+                                    while (true)
+                                    {
+                                        Console.WriteLine("Nhập ngày mua tài sản (yyyy-MM-dd):");
+                                        string input = Console.ReadLine();
+                                        if (input.Equals("exit", StringComparison.OrdinalIgnoreCase)) break;
+
+                                        if (DateTime.TryParse(input, out maintenanceDate)) break;
+
+                                        Console.WriteLine("Ngày không hợp lệ. Vui lòng nhập lại theo định dạng (yyyy-MM-dd) hoặc nhập 'exit' để hủy.");
+                                    }
+
+                                    // Kiểm tra nếu người dùng nhập 'exit' và không có giá trị
+                                    if (maintenanceDate == DateTime.MinValue)
+                                    {
+                                        Console.WriteLine("Thao tác đã bị hủy.");
+                                        break; 
+                                    }
+
                                     break;
                                 case"4":
                                     Console.WriteLine("Nhập mã tài sản đã bảo trì: ");
                                     string idMaintenanceShow = Console.ReadLine();
+                                    if(idMaintenanceShow == "exit") break;
                                     assetManager.ShowMaintenanceHistory(idMaintenanceShow);
                                     break;
                                 default:

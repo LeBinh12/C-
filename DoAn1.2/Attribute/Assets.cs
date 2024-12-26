@@ -15,10 +15,10 @@ namespace DoAn1._2.Attribute
         public double initialValue { get; set; }
 
         public string currentStatus { get; set; }
-        public string maintenanceTime { get; set; }
+        public int maintenanceTime { get; set; }
         public int locationId { get; set; }
 
-        public Assets(string Id, string name, string type, DateTime purchase, double initial, string maintenance, string status, int locationId)
+        public Assets(string Id, string name, string type, DateTime purchase, double initial, int maintenance, string status, int locationId)
         {
             assetId= Id;
             assetName= name;

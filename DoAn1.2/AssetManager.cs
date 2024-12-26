@@ -14,7 +14,6 @@ namespace DoAn1._2
     {
         private Hashtable assets = new Hashtable();
         private BinarySearchTree assetsTree = new BinarySearchTree();
-        private TreeLocation treeLocation = new TreeLocation();
         List<Location> locations = new List<Location>();
         List<AssetType> assetTypes= new List<AssetType>();
         private Dictionary<string, List<MaintenanceHistory>> maintenanceRecords = new Dictionary<string, List<MaintenanceHistory>>();
@@ -42,32 +41,27 @@ namespace DoAn1._2
             locations.Add(new Location(4, "Kitchen", "Nhà bếp"));
             locations.Add(new Location(5, "Main Lobby", "Khu vực lễ tân chính"));
 
-            treeLocation.Add(new Location(1, "Server Room", "Phòng máy chủ"));
-            treeLocation.Add(new Location(2, "Office 105", "Phòng làm việc 105"));
-            treeLocation.Add(new Location(3, "Warehouse", "Kho lưu trữ"));
-            treeLocation.Add(new Location(4, "Kitchen", "Nhà bếp"));
-            treeLocation.Add(new Location(5, "Main Lobby", "Khu vực lễ tân chính"));
 
-            assetsTree.Add(new Assets("A001", "Laptop Dell XPS 13", "Laptop", new DateTime(2022, 5, 15), 1200.0, "Office 101", "Good", 1));
-            assetsTree.Add(new Assets("A002", "iPhone 14 Pro", "Phone", new DateTime(2023, 1, 25), 999.99, "Office 102", "New", 2));
-            assetsTree.Add(new Assets("A003", "Projector Epson", "Projector", new DateTime(2021, 11, 10), 450.0, "Conference Room", "Operational", 1));
-            assetsTree.Add(new Assets("A004", "Desktop PC HP", "Computer", new DateTime(2020, 8, 20), 800.0, "Office 103", "Needs Maintenance", 2));
-            assetsTree.Add(new Assets("A005", "Samsung TV 55 inch", "TV", new DateTime(2021, 7, 12), 650.0, "Lounge Area", "Operational", 3));
-            assetsTree.Add(new Assets("A006", "Canon Printer", "Printer", new DateTime(2020, 3, 30), 200.0, "Office 104", "Operational", 4));
-            assetsTree.Add(new Assets("A007", "Air Conditioner LG", "Appliance", new DateTime(2022, 6, 5), 800.0, "Server Room", "Operational", 5));
-            assetsTree.Add(new Assets("A008", "Smartwatch Garmin", "Wearable", new DateTime(2023, 2, 10), 250.0, "Office 105", "New", 1));
-            assetsTree.Add(new Assets("A009", "Kitchen Refrigerator", "Appliance", new DateTime(2019, 9, 30), 500.0, "Kitchen", "Operational", 2));
-            assetsTree.Add(new Assets("A010", "Drone DJI Mavic", "Drone", new DateTime(2021, 12, 1), 1000.0, "Warehouse", "Operational", 3));
-            assets.Add("A001", new Assets("A001", "Laptop Dell XPS 13", "Laptop", new DateTime(2022, 5, 15), 1200.0, "Office 101", "Good", 1));
-            assets.Add("A002", new Assets("A002", "iPhone 14 Pro", "Phone", new DateTime(2023, 1, 25), 999.99, "Office 102", "New", 2));
-            assets.Add("A003", new Assets("A003", "Projector Epson", "Projector", new DateTime(2021, 11, 10), 450.0, "Conference Room", "Operational", 1));
-            assets.Add("A004", new Assets("A004", "Desktop PC HP", "Computer", new DateTime(2020, 8, 20), 800.0, "Office 103", "Needs Maintenance", 2));
-            assets.Add("A005", new Assets("A005", "Samsung TV 55 inch", "TV", new DateTime(2021, 7, 12), 650.0, "Lounge Area", "Operational", 3));
-            assets.Add("A006", new Assets("A006", "Canon Printer", "Printer", new DateTime(2020, 3, 30), 200.0, "Office 104", "Operational", 4));
-            assets.Add("A007", new Assets("A007", "Air Conditioner LG", "Appliance", new DateTime(2022, 6, 5), 800.0, "Server Room", "Operational", 5));
-            assets.Add("A008", new Assets("A008", "Smartwatch Garmin", "Wearable", new DateTime(2023, 2, 10), 250.0, "Office 105", "New", 1));
-            assets.Add("A009", new Assets("A009", "Kitchen Refrigerator", "Appliance", new DateTime(2019, 9, 30), 500.0, "Kitchen", "Operational", 2));
-            assets.Add("A010", new Assets("A010", "Drone DJI Mavic", "Drone", new DateTime(2021, 12, 1), 1000.0, "Warehouse", "Operational", 3));
+            assetsTree.Add(new Assets("A001", "Laptop Dell XPS 13", "Laptop", new DateTime(2022, 5, 15), 1200.0, 0, "Good", 1));
+            assetsTree.Add(new Assets("A002", "iPhone 14 Pro", "Phone", new DateTime(2023, 1, 25), 999.99, 0, "New", 2));
+            assetsTree.Add(new Assets("A003", "Projector Epson", "Projector", new DateTime(2021, 11, 10), 450.0, 0, "Operational", 1));
+            assetsTree.Add(new Assets("A004", "Desktop PC HP", "Computer", new DateTime(2020, 8, 20), 800.0, 0, "Needs Maintenance", 2));
+            assetsTree.Add(new Assets("A005", "Samsung TV 55 inch", "TV", new DateTime(2021, 7, 12), 650.0, 0, "Operational", 3));
+            assetsTree.Add(new Assets("A006", "Canon Printer", "Printer", new DateTime(2020, 3, 30), 200.0, 0, "Operational", 4));
+            assetsTree.Add(new Assets("A007", "Air Conditioner LG", "Appliance", new DateTime(2022, 6, 5), 800.0, 0, "Operational", 5));
+            assetsTree.Add(new Assets("A008", "Smartwatch Garmin", "Wearable", new DateTime(2023, 2, 10), 250.0, 0, "New", 1));
+            assetsTree.Add(new Assets("A009", "Kitchen Refrigerator", "Appliance", new DateTime(2019, 9, 30), 500.0, 0, "Operational", 2));
+            assetsTree.Add(new Assets("A010", "Drone DJI Mavic", "Drone", new DateTime(2021, 12, 1), 1000.0, 0, "Operational", 3));
+            assets.Add("A001", new Assets("A001", "Laptop Dell XPS 13", "Laptop", new DateTime(2022, 5, 15), 1200.0, 0, "Good", 1));
+            assets.Add("A002", new Assets("A002", "iPhone 14 Pro", "Phone", new DateTime(2023, 1, 25), 999.99, 0, "New", 2));
+            assets.Add("A003", new Assets("A003", "Projector Epson", "Projector", new DateTime(2021, 11, 10), 450.0, 0, "Operational", 1));
+            assets.Add("A004", new Assets("A004", "Desktop PC HP", "Computer", new DateTime(2020, 8, 20), 800.0, 0, "Needs Maintenance", 2));
+            assets.Add("A005", new Assets("A005", "Samsung TV 55 inch", "TV", new DateTime(2021, 7, 12), 650.0, 0, "Operational", 3));
+            assets.Add("A006", new Assets("A006", "Canon Printer", "Printer", new DateTime(2020, 3, 30), 200.0, 0, "Operational", 4));
+            assets.Add("A007", new Assets("A007", "Air Conditioner LG", "Appliance", new DateTime(2022, 6, 5), 800.0, 0, "Operational", 5));
+            assets.Add("A008", new Assets("A008", "Smartwatch Garmin", "Wearable", new DateTime(2023, 2, 10), 250.0, 0, "New", 1));
+            assets.Add("A009", new Assets("A009", "Kitchen Refrigerator", "Appliance", new DateTime(2019, 9, 30), 500.0, 0, "Operational", 2));
+            assets.Add("A010", new Assets("A010", "Drone DJI Mavic", "Drone", new DateTime(2021, 12, 1), 1000.0, 0, "Operational", 3));
 
 
             AddMaintenance("A001", new DateTime(2023, 01, 15));
@@ -107,7 +101,7 @@ namespace DoAn1._2
             }
             else
             {
-                Console.WriteLine("No as found.");
+                Console.WriteLine("Hiện tại không có vị trí nào ở công ty");
             }
         }
 
@@ -209,7 +203,7 @@ namespace DoAn1._2
             }
         }
 
-        public void UpdateAsset(string assetId, string newName, string newType, DateTime newPurchase, double newInitialValue, string newMaintenance, string newStatus, int newLocationId)
+        public void UpdateAsset(string assetId, string newName, string newType, DateTime newPurchase, double newInitialValue, int newMaintenance, string newStatus, int newLocationId)
         {
             // Kiểm tra tài sản trong Hashtable
             if (assets.ContainsKey(assetId))
@@ -283,6 +277,7 @@ namespace DoAn1._2
         }
 
 
+
         public bool CheckLocation(int location)
         {
             foreach(var location1 in locations)
@@ -309,10 +304,17 @@ namespace DoAn1._2
         // hiển thị tất cả thông tin loại tài sản
         public void DisplayAssetsType()
         {
-            foreach (var asset in assetTypes)
+            if (assetTypes.Count > 0)
             {
-                Console.WriteLine(asset.ToString());
+                foreach (var asset in assetTypes)
+                {
+                    Console.WriteLine(asset.ToString());
+                }
+            } else
+            {
+                Console.WriteLine("Hiện Dữ liệu loại tài sản đang rỗng!");
             }
+
         }
 
         // hiển thị tất cả tài sản theo mã loại
@@ -412,7 +414,6 @@ namespace DoAn1._2
 
         public void AddLocation(int location, string locationName, string description)
         {
-            treeLocation.Add(new Location(location, locationName, description));
             locations.Add(new Location(location,locationName,description));
             Console.WriteLine("Dữ liệu đã thêm thành công!");
         }
