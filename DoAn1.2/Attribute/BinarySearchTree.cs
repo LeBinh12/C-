@@ -56,6 +56,27 @@ namespace DoAn1._2.Attribute
             return matchedAssets;
         }
 
+        private void GetAllAssetsAsDictionary(Node node, Dictionary<string, Assets> allAssets)
+        {
+            if (node == null) return;
+
+            GetAllAssetsAsDictionary(node.Left, allAssets);
+
+            if (node.Asset != null)  
+            {
+                allAssets[node.Asset.assetId] = node.Asset;
+            }
+
+            GetAllAssetsAsDictionary(node.Right, allAssets);
+        }
+
+        public Dictionary<string, Assets> GetAllAssetsFromTreeAsDictionary()
+        {
+            Dictionary<string, Assets> allAssets = new Dictionary<string, Assets>();
+            GetAllAssetsAsDictionary(root, allAssets);  
+            return allAssets;
+        }
+
         private void SearchByLocationRecursive(Node node, int locationId, List<Assets> matchedAssets)
         {
             if (node == null)
@@ -124,7 +145,7 @@ namespace DoAn1._2.Attribute
             // Tìm tài sản trong cây bằng ID
             if (node.Asset.assetId == updatedAsset.assetId)
             {
-                node.Asset = updatedAsset;  
+                node.Asset = updatedAsset;
             }
             else if (string.Compare(updatedAsset.assetId, node.Asset.assetId) < 0)
             {
@@ -168,23 +189,23 @@ namespace DoAn1._2.Attribute
             else
             {
                 // Nút cần xóa đã được tìm thấy
-                if (node.Left == null && node.Right == null) 
+                if (node.Left == null && node.Right == null)
                 {
                     return null;
                 }
-                else if (node.Left == null) 
+                else if (node.Left == null)
                 {
                     return node.Right;
                 }
-                else if (node.Right == null) 
+                else if (node.Right == null)
                 {
                     return node.Left;
                 }
-                else 
+                else
                 {
                     Node minNode = FindMinNode(node.Right);
-                    node.Asset = minNode.Asset;  
-                    node.Right = DeleteNode(node.Right, minNode.Asset.assetId); 
+                    node.Asset = minNode.Asset;
+                    node.Right = DeleteNode(node.Right, minNode.Asset.assetId);
                 }
             }
 
@@ -323,6 +344,89 @@ namespace DoAn1._2.Attribute
         {
             root = DeleteNodeType(root, assetType);
             return root != null;
+        }
+
+
+        private void AddToTop10(List<Assets> topAssets, Assets asset)
+        {
+            if (topAssets.Count < 10)
+            {
+                topAssets.Add(asset);
+            }
+            else
+            {
+                int minIndex = 0;
+                for (int i = 1; i < topAssets.Count; i++)
+                {
+                    if (topAssets[i].initialValue < topAssets[minIndex].initialValue)
+                        minIndex = i;
+                }
+
+                if (asset.initialValue > topAssets[minIndex].initialValue)
+                {
+                    topAssets[minIndex] = asset;
+                }
+            }
+        }
+
+        private void FindTop10Assets(Node node, List<Assets> topAssets)
+        {
+            if (node == null) return;
+
+            FindTop10Assets(node.Left, topAssets);
+
+            AddToTop10(topAssets, node.Asset);
+
+            FindTop10Assets(node.Right, topAssets);
+        }
+
+        public List<Assets> GetTop10MostExpensiveAssets()
+        {
+            List<Assets> topAssets = new List<Assets>();
+            FindTop10Assets(root, topAssets);
+            return topAssets;
+        }
+        private void AddLeastToTop10(List<Assets> topAssets, Assets asset)
+        {
+            if (topAssets.Count < 10)
+            {
+                topAssets.Add(asset); 
+            }
+            else
+            {
+                int maxIndex = 0;
+
+                for (int i = 1; i < topAssets.Count; i++)
+                {
+                    if (topAssets[i].initialValue > topAssets[maxIndex].initialValue)
+                    {
+                        maxIndex = i;
+                    }
+                }
+
+                if (asset.initialValue < topAssets[maxIndex].initialValue)
+                {
+                    topAssets[maxIndex] = asset;  
+                }
+            }
+        }
+
+        private void FindLeastTop10Assets(Node node, List<Assets> topAssets)
+        {
+            if (node == null) return;
+
+            FindTop10Assets(node.Left, topAssets);  
+
+            AddLeastToTop10(topAssets, node.Asset);  
+
+            FindTop10Assets(node.Right, topAssets);  
+        }
+
+        public List<Assets> GetTop10LeastExpensiveAssets()
+        {
+            List<Assets> topAssets = new List<Assets>();
+            FindLeastTop10Assets(root, topAssets);  
+            return topAssets;
         }
     }
 }

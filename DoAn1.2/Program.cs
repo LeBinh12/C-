@@ -1,5 +1,6 @@
 ﻿using DoAn1._2;
 using DoAn1._2.Attribute;
+using DoAn1._2.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,18 +14,20 @@ namespace DoAn1._2
         static void Main(string[] args)
         {
             AssetManager assetManager= new AssetManager();
+            LocationManager locationManager = new LocationManager();
+            AssetTypeManager assetTypeManager = new AssetTypeManager();
 
             // chuyển sang tiếng việt
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             string choose;
             do
             {
-                Console.WriteLine("\n===== Quản Lý Tài Sản Cho Công Ty =====");
-                Console.WriteLine("1. Quản lý thông tin Tài sản");
-                Console.WriteLine("2. Quản lý thông tin Loại tài sản");
-                Console.WriteLine("3. Quản lý thông tin Vị trí");
-                Console.WriteLine("4. Tìm kiếm và theo dỗi tài sản");
-
+                Console.WriteLine("\n************** Quản Lý Tài Sản Cho Công Ty *************");
+                Console.WriteLine("**  1. Quản lý thông tin Tài sản                      **");
+                Console.WriteLine("**  2. Quản lý thông tin Loại tài sản                 **");
+                Console.WriteLine("**  3. Quản lý thông tin Vị trí                       **");
+                Console.WriteLine("**  4. Tìm kiếm và theo dỗi tài sản                   **");
+                Console.WriteLine("********************************************************");
                 choose = Console.ReadLine();
 
                 switch (choose)
@@ -36,13 +39,17 @@ namespace DoAn1._2
                         do
                         {
                             Console.WriteLine("\n===== Quản lý thông tin tài sản =====");
-                            Console.WriteLine("1. Thêm tài sản");
-                            Console.WriteLine("2. Sửa tài sản");
-                            Console.WriteLine("3. Xóa tài sản");
-                            Console.WriteLine("4.Hiển thị tất cả tài sản");
-                            Console.WriteLine("5.Hiển thị tất cả tài sản thuộc vị trí nhất định");
-                            Console.WriteLine("6.Hiển thị tất cả tài sản thuộc một loại nhất định");
-                            Console.WriteLine("0. Quay lại");
+                            Console.WriteLine("**  1. Thêm tài sản                                       **");
+                            Console.WriteLine("**  2. Sửa tài sản                                        **");
+                            Console.WriteLine("**  3. Xóa tài sản                                        **");
+                            Console.WriteLine("**  4.Hiển thị tất cả tài sản                             **");
+                            Console.WriteLine("**  5.Hiển thị tất cả tài sản thuộc vị trí nhất định      **");
+                            Console.WriteLine("**  6.Hiển thị tất cả tài sản thuộc một loại nhất định    **");
+                            Console.WriteLine("**  7. Top 10 tài sản có giá trị cao nhất                 **");
+                            Console.WriteLine("**  8. Top 10 tài sản có giá trị thấp nhất                **");
+                            Console.WriteLine("**  9. Xuất file exel tất cả tài sản                      **");
+                            Console.WriteLine("**  0. Quay lại                                           **");
+                            Console.WriteLine("*************************************************************");
 
                             manageChoice = Console.ReadLine();
 
@@ -100,11 +107,10 @@ namespace DoAn1._2
                                     if (initial == 0) break;
 
 
-                                    int maintenance = 0;
 
 
                                     Console.WriteLine("Tất cả các thông tin về loại tài sản");
-                                    assetManager.DisplayAssetsType();
+                                    assetTypeManager.DisplayAssetsType();
                                     string type;
                                     bool bool_Type = false;
 
@@ -114,7 +120,7 @@ namespace DoAn1._2
                                         type = Console.ReadLine();
                                         if (type == "exit") break;
 
-                                        if (assetManager.CheckType(type))
+                                        if (assetTypeManager.CheckType(type))
                                             bool_Type = true;
                                         else
                                             Console.WriteLine("Loại tài sản không tồn tịa, vui lòng nhập lại");
@@ -125,7 +131,7 @@ namespace DoAn1._2
 
                                     Console.WriteLine("Tất cả các thông tin về vị trí của công ty");
 
-                                    assetManager.DisplayAllLocation();
+                                    locationManager.DisplayAllLocation();
                                     bool isValid = false;
                                     int location = 0;
                                     do
@@ -139,7 +145,7 @@ namespace DoAn1._2
                                         {
                                             Console.WriteLine($"Bạn đã nhập: {location}");
 
-                                            if (assetManager.CheckLocation(location))
+                                            if (locationManager.CheckLocation(location))
                                                 isValid = true;
                                             else
                                                 Console.WriteLine("Vị trí không tồn tại, vui lòng nhập lại.");
@@ -154,7 +160,7 @@ namespace DoAn1._2
 
                                     if (location == 0) break;
 
-                                    Assets assets = new Assets(id, name, type, purchase, initial, maintenance, status,location);
+                                    Assets assets = new Assets(id, name, type, purchase, initial, status,location);
                                     assetManager.AddAsset(assets);
                                     break;
                                 case "2":
@@ -203,22 +209,9 @@ namespace DoAn1._2
                                         if (newInitialValue == 0) break;
 
 
-                                        int newMaintenance = 0;
-                                        while (true)
-                                        {
-                                            Console.Write("Nhập số lần bảo trì mới: ");
-                                            string input = Console.ReadLine();
-                                            if(input == "exit") break;
-
-                                            if (int.TryParse(input, out newMaintenance)) break;
-
-                                            Console.WriteLine("Giá trị không hợp lệ. Vui lòng nhập số hoặc nhập 'exit' để hủy.");
-                                        }
-                                        if (newMaintenance == 0) break;
-
 
                                         Console.WriteLine("Tất cả các thông tin về loại tài sản");
-                                        assetManager.DisplayAssetsType();
+                                        assetTypeManager.DisplayAssetsType();
                                         string new_Type;
                                         bool bool_Type_New = false;
 
@@ -227,7 +220,7 @@ namespace DoAn1._2
                                             Console.Write("Nhập mã loại: ");
                                             new_Type = Console.ReadLine();
                                             if(new_Type == "exit") break;
-                                            if (assetManager.CheckType(new_Type))
+                                            if (assetTypeManager.CheckType(new_Type))
                                                 bool_Type_New = true;
                                             else
                                                 Console.WriteLine("Loại tài sản không tồn tịa, vui lòng nhập lại");
@@ -242,7 +235,7 @@ namespace DoAn1._2
 
                                         Console.WriteLine("Tất cả các thông tin về vị trí của công ty");
 
-                                        assetManager.DisplayAllLocation();
+                                        locationManager.DisplayAllLocation();
                                         bool isValid_Location = false;
                                         int new_Location = 0;
                                         do
@@ -254,7 +247,7 @@ namespace DoAn1._2
                                             {
                                                 Console.WriteLine($"Bạn đã nhập: {new_Location}");
 
-                                                if (assetManager.CheckLocation(new_Location))
+                                                if (locationManager.CheckLocation(new_Location))
                                                     isValid_Location = true;
                                                 else
                                                     Console.WriteLine("Vị trí không tồn tại, vui lòng nhập lại.");
@@ -267,8 +260,8 @@ namespace DoAn1._2
 
                                         if (new_Location == 0) break;
 
-                                        assetManager.UpdateAsset(idUpdate, newName, newType, newPurchase, newInitialValue,
-                                            newMaintenance, new_Type, new_Location);
+                                        assetManager.UpdateAsset(idUpdate, newName, newType, newPurchase, newInitialValue
+                                            , new_Type, new_Location);
 
 
                                     }
@@ -302,7 +295,7 @@ namespace DoAn1._2
 
                                     break;
                                 case "5":
-                                    assetManager.DisplayAllLocation();
+                                    locationManager.DisplayAllLocation();
                                     bool isValid_Location_Delete = false;
                                     int locationId = 0;
                                     do
@@ -314,7 +307,7 @@ namespace DoAn1._2
                                         {
                                             Console.WriteLine($"Bạn đã nhập: {locationId}");
 
-                                            if (assetManager.CheckLocation(locationId))
+                                            if (locationManager.CheckLocation(locationId))
                                                 isValid_Location_Delete = true;
                                             else
                                                 Console.WriteLine("Vị trí không tồn tại, vui lòng nhập lại.");
@@ -329,13 +322,23 @@ namespace DoAn1._2
                                     assetManager.PrintAssetsByLocation(locationId);
                                     break;
                                 case "6":
-                                    assetManager.DisplayAssetsType();
+                                    assetTypeManager.DisplayAssetsType();
                                     Console.WriteLine("Bạn có thể nhập 'exit' bất kỳ lúc nào để hủy bỏ thao tác thêm tài sản.");
                                     Console.WriteLine("Nhập mã loại: ");
                                     string TypeId = Console.ReadLine();
                                     if (TypeId == "exit") break;
                                     assetManager.DisplayAssetsTypeId(TypeId);
                                     break;
+                                case "7":
+                                    assetManager.ExportExcelHighPrice();
+                                    break;
+                                case "8":
+                                    assetManager.ExportExcelShortPrice();
+                                    break;
+                                case "9":
+                                    assetManager.ExportExcelAll();
+                                    break;
+
                                 case "0":
                                     break;
                                 default:
@@ -352,19 +355,19 @@ namespace DoAn1._2
                         string assetTypeChoice;
                         do
                         {
-                            Console.WriteLine("\n===== Quản lý thông tin Loại tài sản =====");
-                            Console.WriteLine("1. Hiển thị tất cả loại tài sản");
-                            Console.WriteLine("2. Thêm loại tài sản mới");
-                            Console.WriteLine("3. Cập nhật thông tin loại tài sản");
-                            Console.WriteLine("4. Xóa loại tài sản");
-                            Console.WriteLine("0. Quay lại");
-
+                            Console.WriteLine("\n************** Quản lý thông tin Loại tài sản *********");
+                            Console.WriteLine("**  1. Hiển thị tất cả loại tài sản                  **");
+                            Console.WriteLine("**  2. Thêm loại tài sản mới                         **");
+                            Console.WriteLine("**  3. Cập nhật thông tin loại tài sản               **");
+                            Console.WriteLine("**  4. Xóa loại tài sản                              **");
+                            Console.WriteLine("**  0. Quay lại                                      **");
+                            Console.WriteLine("*******************************************************");
                             assetTypeChoice= Console.ReadLine();
 
                             switch (assetTypeChoice)
                             {
                                 case "1":
-                                    assetManager.DisplayAssetsType();
+                                    assetTypeManager.DisplayAssetsType();
                                     break;
                                 case "2":
                                     string idType;
@@ -376,7 +379,7 @@ namespace DoAn1._2
                                         idType = Console.ReadLine();
                                         if(idType == "exit") break;
 
-                                        if (assetManager.CheckType(idType))
+                                        if (assetTypeManager.CheckType(idType))
                                             Console.WriteLine("Dữ liệu này đã tồn tại, vui lòng nhập lại");
                                         else
                                             statusType = true;
@@ -388,7 +391,7 @@ namespace DoAn1._2
                                     Console.WriteLine("Tên loại tài sản: ");
                                     string nameType = Console.ReadLine();
 
-                                    assetManager.AddAssetType(idType, nameType);
+                                    assetTypeManager.AddAssetType(idType, nameType);
                                     break;
                                 case "3":
                                     string idTypeUpdate;
@@ -402,7 +405,7 @@ namespace DoAn1._2
                                         if (idTypeUpdate == "exit") break;
                                         if (idTypeUpdate == "0")
                                             break;
-                                        if (!assetManager.CheckType(idTypeUpdate))
+                                        if (!assetTypeManager.CheckType(idTypeUpdate))
                                             Console.WriteLine("Dữ liệu này Không tồn tại, vui lòng nhập lại");
                                         else
                                             statusTypeUpdate = true;
@@ -416,7 +419,7 @@ namespace DoAn1._2
                                     Console.WriteLine("Tên loại tài sản: ");
                                     string nameTypeUpdate = Console.ReadLine();
 
-                                    assetManager.UpdateAssetType(idTypeUpdate, nameTypeUpdate);
+                                    assetTypeManager.UpdateAssetType(idTypeUpdate, nameTypeUpdate);
                                     break;
                                 case "4":
                                     string idTypeDelete;
@@ -429,7 +432,7 @@ namespace DoAn1._2
                                         if (idTypeDelete == "exit") break;
                                         if (idTypeDelete == "0")
                                             break;
-                                        if (!assetManager.CheckType(idTypeDelete))
+                                        if (!assetTypeManager.CheckType(idTypeDelete))
                                             Console.WriteLine("Dữ liệu này Không tồn tại, vui lòng nhập lại");
                                         else
                                             statusTypeDelete = true;
@@ -438,7 +441,7 @@ namespace DoAn1._2
 
                                     if (idTypeDelete == "exit")
                                         break;
-                                    assetManager.DeleteAssetType(idTypeDelete);
+                                    assetTypeManager.DeleteAssetType(idTypeDelete);
 
                                     break;
                                 case "0":
@@ -461,19 +464,19 @@ namespace DoAn1._2
                         string assetLocation;
                         do
                         {
-                            Console.WriteLine("\n===== Quản lý thông tin Vị trí tài sản =====");
-                            Console.WriteLine("1. Hiển thị tất cả vị trí");
-                            Console.WriteLine("2. Thêm vị trí mới");
-                            Console.WriteLine("3. Sửa vị trí");
-                            Console.WriteLine("4. Xóa vị trí");
-                            Console.WriteLine("0. Quay lại");
-
+                            Console.WriteLine("\n******** Quản lý thông tin Vị trí tài sản *****");
+                            Console.WriteLine("**  1. Hiển thị tất cả vị trí                **");
+                            Console.WriteLine("**  2. Thêm vị trí mới                       **");
+                            Console.WriteLine("**  3. Sửa vị trí                            **");
+                            Console.WriteLine("**  4. Xóa vị trí                            **");
+                            Console.WriteLine("**  0. Quay lại                              **");
+                            Console.WriteLine("***********************************************");
                             assetLocation = Console.ReadLine();
 
                             switch (assetLocation)
                             {
                                 case "1":
-                                    assetManager.DisplayAllLocation();
+                                    locationManager.DisplayAllLocation();
                                     break;
 
                                 case "2":
@@ -491,7 +494,7 @@ namespace DoAn1._2
                                             idLocationNew = int.Parse(Console.ReadLine());
                                             if (idLocationNew == 0)
                                                 break;
-                                            if (assetManager.CheckLocation(idLocationNew))
+                                            if (locationManager.CheckLocation(idLocationNew))
                                                 Console.WriteLine("Dữ liệu này Không tồn tại, vui lòng nhập lại");
                                             else
                                                 checkLocationNew = true;
@@ -513,7 +516,7 @@ namespace DoAn1._2
                                     string description = Console.ReadLine();
                                     if(description == "exit") break;
 
-                                    assetManager.AddLocation(idLocationNew, locationName, description);
+                                    locationManager.AddLocation(idLocationNew, locationName, description);
 
 
                                     break;
@@ -530,7 +533,7 @@ namespace DoAn1._2
                                         {
                                             if (idLocationUpdate == 0)
                                                 break;
-                                            if (!assetManager.CheckLocation(idLocationUpdate))
+                                            if (!locationManager.CheckLocation(idLocationUpdate))
                                                 Console.WriteLine("Dữ liệu này Không tồn tại, vui lòng nhập lại");
                                             else
                                                 checkLocationUpdate = true;
@@ -552,7 +555,7 @@ namespace DoAn1._2
                                     string descriptionNew = Console.ReadLine();
                                     if(descriptionNew == "exit") break;
 
-                                    assetManager.UpdateLocation(idLocationUpdate, locationNameNew, descriptionNew);
+                                    locationManager.UpdateLocation(idLocationUpdate, locationNameNew, descriptionNew);
 
                                     break;
                                 case "4":
@@ -568,7 +571,7 @@ namespace DoAn1._2
                                         if(int.TryParse(input, out idLocationDelete))
                                         if (idLocationDelete == 0)
                                             break;
-                                        if (!assetManager.CheckLocation(idLocationDelete))
+                                        if (!locationManager.CheckLocation(idLocationDelete))
                                             Console.WriteLine("Dữ liệu này Không tồn tại, vui lòng nhập lại");
                                         else
                                             checkLocationUpdate = true;
@@ -578,7 +581,7 @@ namespace DoAn1._2
                                     if (idLocationDelete == 0)
                                         break;
 
-                                    assetManager.DeleteLocation(idLocationDelete);
+                                    locationManager.DeleteLocation(idLocationDelete);
 
                                     break;
                                 case "0":
@@ -593,12 +596,14 @@ namespace DoAn1._2
                         
                         do
                         {
-                            Console.WriteLine("\n===== Tìm kiếm và theo dỗi tài sản =====");
-                            Console.WriteLine("1. Tìm kiếm theo tên Tài sản");
-                            Console.WriteLine("2. Tìm kiếm theo Id Tài sản");
-                            Console.WriteLine("3. Cập nhật lịch sử bảo trì");
-                            Console.WriteLine("4. Xem Lịch sử bảo trì của tài sản");
-                            Console.WriteLine("0. Quay lại");
+                            Console.WriteLine("\n*********** Tìm kiếm và theo dỗi tài sản ********");
+                            Console.WriteLine("**  1. Tìm kiếm tài sản                        **");
+                            Console.WriteLine("**  2. Cập nhật lịch sử bảo trì                **");
+                            Console.WriteLine("**  3. Xem Lịch sử bảo trì của tài sản         **");
+                            Console.WriteLine("**  4. 10 tài sản có số lần bảo trì cao nhât   **");
+                            Console.WriteLine("**  4. 10 tài sản có số lần bảo trì thấp nhât  **");
+                            Console.WriteLine("**  0. Quay lại                                **");
+                            Console.WriteLine("*************************************************");
                             Console.WriteLine("Bạn có thể nhập 'exit' bất kỳ lúc nào để hủy bỏ thao tác thêm tài sản.");
                             searchChoice = Console.ReadLine();
 
@@ -606,18 +611,37 @@ namespace DoAn1._2
                             {
 
                                 case "1":
-                                    Console.WriteLine("Nhập tên Tài sản: ");
-                                    string name = Console.ReadLine();
-                                    if(name == "exit") break;
-                                    assetManager.SearchAssetName(name);
+                                    string search;
+                                    do
+                                    {
+                                        Console.WriteLine("\n===== Tìm kiếm và theo dỗi tài sản =====");
+                                        Console.WriteLine("**  1. Tìm kiếm tài sản                      **");
+                                        Console.WriteLine("**  2. Tìm kiếm theo Id Tài sản              **");
+                                        Console.WriteLine("**  0. Quay lại                              **");
+                                        Console.WriteLine("***********************************************");
+                                        search = Console.ReadLine();
+
+                                        switch (search )
+                                        {
+                                            case "1":
+                                                Console.WriteLine("Nhập tên Tài sản: ");
+                                                string name = Console.ReadLine();
+                                                if (name == "exit") break;
+                                                assetManager.SearchAssetName(name);
+                                                break;
+                                            case "2":
+                                                Console.WriteLine("Nhập mã tài sản: ");
+                                                string id = Console.ReadLine();
+                                                if (id == "exit") break;
+                                                assetManager.SearchAsset(id);
+                                                break;
+                                            default:
+                                                Console.WriteLine("Lựa chọn không hợp lệ");
+                                                break;
+                                        }
+                                    } while (search != "0");
                                     break;
                                 case "2":
-                                    Console.WriteLine("Nhập mã tài sản: ");
-                                    string id = Console.ReadLine();
-                                    if (id == "exit") break;
-                                    assetManager.SearchAsset(id);
-                                    break;
-                                case "3":
                                     Console.WriteLine("Nhập mã tài sản đã bảo trì: ");
                                     string idMaintenance = Console.ReadLine();
                                     if(idMaintenance == "exit") break;
@@ -643,7 +667,7 @@ namespace DoAn1._2
                                     }
 
                                     break;
-                                case"4":
+                                case"3":
                                     Console.WriteLine("Nhập mã tài sản đã bảo trì: ");
                                     string idMaintenanceShow = Console.ReadLine();
                                     if(idMaintenanceShow == "exit") break;

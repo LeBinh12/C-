@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DoAn1._2.Manager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,8 @@ namespace DoAn1._2.Attribute
 {
     internal class Assets
     {
+        LocationManager locationManager = new LocationManager();
+        AssetTypeManager typeManager = new AssetTypeManager();
         public string assetId { get; set; }
         public string assetName { get; set; }
         public string assetType { get; set; }
@@ -15,17 +18,15 @@ namespace DoAn1._2.Attribute
         public double initialValue { get; set; }
 
         public string currentStatus { get; set; }
-        public int maintenanceTime { get; set; }
         public int locationId { get; set; }
 
-        public Assets(string Id, string name, string type, DateTime purchase, double initial, int maintenance, string status, int locationId)
+        public Assets(string Id, string name, string type, DateTime purchase, double initial, string status, int locationId)
         {
             assetId= Id;
             assetName= name;
             assetType= type;
             purchaseAsset = purchase;
             initialValue = initial;
-            maintenanceTime = maintenance;
             currentStatus = status;
             this.locationId = locationId;
         }
@@ -34,7 +35,7 @@ namespace DoAn1._2.Attribute
         {
             return $"Id: {assetId} Name: {assetName} Loại: {assetType}" +
                 $" Purchase: {purchaseAsset} Initial: {initialValue} Maintenance:" +
-                $" {maintenanceTime} Location ID: {locationId} Status: {currentStatus}";
+                $"  Location ID: {locationManager.NameLocation(locationId)} Status: {typeManager.NameAssetType(assetType)}";
 
         }
     }
